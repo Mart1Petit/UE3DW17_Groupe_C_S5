@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, HttpStatus,Res} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {Users} from "src/users/users.schema";
+import { response } from 'express';
 
 
 @Controller('api')
@@ -14,6 +15,25 @@ export class UsersController {
           newUsers
       })
   }
+  @Get()
+  async getUsers( @Res() response,@Body() users:Users){
+    const utilisateurs = await this.usersService.read();
+    return response.status(HttpStatus.OK).json({utilisateurs});
+  }
+  @Delete('/:id')
+  async deleteUsers(@Res() response,@Param('id') id){
+    const deleteutilisateurs = await this.usersService.delete(id);
+    return response.status(HttpStatus.OK).json({deleteutilisateurs});
+
+
+  }
+  @Put('/:id')
+    async update(@Res() response, @Param('id') id, @Body() users: Users) {
+        const updatedutilisateur = await this.usersService.update(id, users);
+        return response.status(HttpStatus.OK).json({
+          updatedutilisateur
+        })
+    }
   }
   /*@Post('createuser')
   createUser(@Body() createUserDto: CreateUserDto) {

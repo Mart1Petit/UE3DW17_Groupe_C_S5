@@ -12,6 +12,17 @@ export class UsersService {
     const newUsers = new this.usersModel(users);
     return newUsers.save();
 }
+
+async read(): Promise<Users[]> {
+  return await this.usersModel.find().exec();
+}
+
+async delete(id) : Promise<any>{
+  await this.usersModel.findByIdAndDelete(id);
+}
+async update(id, users: Users): Promise<Users> {
+  return await this.usersModel.findByIdAndUpdate(id, users, {new: true})
+}
 }
  /* constructor(
     @InjectRepository(Users)
